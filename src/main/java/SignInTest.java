@@ -1,51 +1,32 @@
-import com.sun.javafx.PlatformUtil;
+import commonlogic.GenericMethods;
+import locators.HomePageElements;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class SignInTest {
+public class SignInTest extends GenericMethods {
 
-    WebDriver driver = new ChromeDriver();
+	WebDriver driver = null;
 
-    @Test
-    public void shouldThrowAnErrorIfSignInDetailsAreMissing() {
+	@Test
+	public void shouldThrowAnErrorIfSignInDetailsAreMissing() {
 
-        setDriverPath();
+		driver=openHomepage();
 
-        driver.get("https://www.cleartrip.com/");
-        waitFor(2000);
+		waitFor(2000);
+		HomePageElements element=new HomePageElements(driver);
 
-        driver.findElement(By.linkText("Your trips")).click();
-        driver.findElement(By.id("SignIn")).click();
+		element.yourTrips.click();
+		element.signIn.click();
+		driver.switchTo().frame(element.signInFrame);
+		element.signInButton.click();
 
-        driver.findElement(By.id("signInButton")).click();
-
-        String errors1 = driver.findElement(By.id("errors1")).getText();
-        Assert.assertTrue(errors1.contains("There were errors in your submission"));
-        driver.quit();
-    }
-
-    private void waitFor(int durationInMilliSeconds) {
-        try {
-            Thread.sleep(durationInMilliSeconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-    }
-
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
+		String errors1 = element.errors.getText();
+		Assert.assertTrue(errors1.contains("There were errors in your submission"));
+		driver.quit();
+	}
 
 
 }
