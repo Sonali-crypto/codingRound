@@ -13,6 +13,7 @@ public class FlightBookingTest extends GenericMethods {
 
 	
     WebDriver driver=null;
+    HomePageElements element=new HomePageElements(driver);
 
 
     @Test
@@ -22,11 +23,17 @@ public class FlightBookingTest extends GenericMethods {
         driver=openHomepage();
         
         waitFor(2000);
-        HomePageElements element=new HomePageElements(driver);
+        
+        System.out.println("Navigated to Home Page");
+        
         element.oneWay.click();
+        System.out.println("oneWay has been clicked");
 
+        
         element.fromPlace.clear();
         element.fromPlace.sendKeys("Bangalore");
+        
+
 
         //wait for the auto complete options to appear for the origin
 
@@ -34,6 +41,8 @@ public class FlightBookingTest extends GenericMethods {
         
         List<WebElement> originOptions = element.originOptionslist;
         originOptions.get(0).click();
+
+        System.out.println("Source has been selected");
 
         element.toPlace.clear();
         element.toPlace.sendKeys("Delhi");
@@ -45,15 +54,23 @@ public class FlightBookingTest extends GenericMethods {
         List<WebElement> destinationOptions = element.destinationOptionslist;
         destinationOptions.get(0).click();
 
+        System.out.println("Destination has been selected");
+
         //element.departDate.click();
         element.date.click();
+
+        System.out.println("Depart Date has been selected");
 
         //all fields filled in. Now click on search
         element.SearchBtn.click();
 
+        System.out.println("Search button has been clicked");
+
         waitFor(5000);
         //verify that result appears for the provided journey search
         Assert.assertTrue(isElementPresent(element.searchSummary));
+        
+        System.out.println("Search Results are displayed");
 
         //close the browser
         driver.quit();
